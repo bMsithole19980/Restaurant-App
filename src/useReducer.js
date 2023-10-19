@@ -14,6 +14,11 @@ const userReducer =(state= initialState, action)=>{
                 ...state,
                 user: null
             };
+        case 'REGISTER':
+            return{
+                ...state,
+                user: action.payload,
+            }
 
         default:
             return state;
