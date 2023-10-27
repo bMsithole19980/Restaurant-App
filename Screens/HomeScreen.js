@@ -1,112 +1,265 @@
-import React from 'react';
-import { StyleSheet, View, Text } from 'react-native';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import Icon from 'react-native-vector-icons/FontAwesome';
-import UserScreen from './UserScreen';
-import FavouriteScreen from './FavouriteScreen'
-import OrderScreen from './OrderScreen';
-import Restaurant from './Restaurant';
-
-const Tab = createBottomTabNavigator();
+import { Pressable, StyleSheet, Text, View, Image } from "react-native";
+import React from "react";
+import NavaBar from "../Components/NavBar";
+import Search from "../Components/Search";
+import { useEffect, useState } from "react";;
+import { collection, getDocs } from "firebase/firestore";
+import { db } from "../Config/Firebase";
+import { FlatList } from "react-native-gesture-handler";
+import { Ionicons, FontAwesome} from "@expo/vector-icons";
+import { useNavigation } from "@react-navigation/native";
+import BotttomNavigator from "../Components/BotttomNavigator";
 
 export default function HomeScreen() {
+
+    const navigation = useNavigation();
+
+    
+  const [restaurants, setRestaurants] = useState([]);
+  const [searchQuery, setSearchQuery] = useState();
+
+  const menuItem = [
+    {
+      id: 1,
+      name: "Burger",
+      image: "mbeme",
+      rating: "5.0",
+    },
+    {
+      id: 1,
+      name: "Burger",
+      image: "mbeme",
+      rating: "5.0",
+    },
+    {
+      id: 1,
+      name: "Burger",
+      image: "mbeme",
+      rating: "5.0",
+    },
+    {
+      id: 1,
+      name: "Burger",
+      image: "mbeme",
+      rating: "5.0",
+    },
+    {
+      id: 1,
+      name: "Burger",
+      image: "mbeme",
+      rating: "5.0",
+    },
+  ];
+
+
+
+
+
+  const toggleFavorite = (restaurantName) => {
+   
+    const updatedFavourites = new Set(favouriteRestaurant);
+
+    if (updatedFavourites.has(restaurantName)) {
+      updatedFavourites.delete(restaurantName);
+    } else {
+      updatedFavourites.add(restaurantName); 
+    }
+
+    setFavouriteRestaurant(updatedFavourites); 
+  };
+   
+   const handleViewAll = () => {
+    navigation.navigate("RestaurantDiscovery");
+   }
+
+ 
+    useEffect(() => {
+    const fetchRestaurantData = async () => {
+      const querySnapshot = await getDocs(collection(db, "restaurants"));
+      const data = [];
+      querySnapshot.forEach((doc) => {
+        data.push(doc.data());
+      });
+      setRestaurants(data);
+    };
+    fetchRestaurantData();
+  }, []);
+
+  const [favouriteRestaurant, setFavouriteRestaurant] = useState(new Set());
+
+
+
   return (
     <View style={styles.container}>
-      {/* <NavBar />
-      <Search /> */}
-      <Tab.Navigator
-        tabBarOptions={{
-          activeTintColor: 'orange',
-          inactiveTintColor: 'gray',
-         
-        }}
-        
-      >
-        <Tab.Screen
-          name="Home"
-          component={Restaurant}
-          style={styles.tabNavigator}
-          options={{
-            tabBarIcon: ({ color, size }) => (
-              <Icon name="home" color={color} size={size} />
-            ),
-            headerShown: false
-            
-          }}
-          
+      <NavaBar />
+
+      <View style={styles.categories}>
+        <View style={styles.cat}>
+          <Text style={styles.catName}>Categories</Text>
+          <View style={styles.menuItems}>
+            {menuItem.map((menuItem) => (
+              <View style={styles.menu}>
+                <Pressable styles={styles.menuName}>
+                  <Text>Burger</Text>
+                </Pressable>
+              </View>
+            ))}
+          </View>
+        </View>
+      </View>
+      <View style={styles.restaurant}>
+        <View style={styles.res}>
+          <Text style={styles.all}>All Restaurants</Text>
+          <Pressable
+          onPress={handleViewAll}>
+          <Text style={styles.viewAll}>View All</Text>
+          </Pressable>
+        </View>
+        <FlatList
+          data={restaurants}
+          renderItem={({ item }) => (
+            <View style={styles.resContainer} >
+              <Image
+                style={styles.resImage}
+                source={{ uri: item.RestaurantImage }}
+              />
+              <Text style={styles.resName}>{item.RestaurantName}</Text>
+              <Text style={styles.delivery}>{item.RestaurantAddress}</Text>
+              <View style={styles.delivery}>
+                <Text style={styles.delivery}>Delivery fee: </Text>
+                <Text style={styles.delivery}>Ksh {item.DeliveryFee}</Text>
+              </View>
+              <Pressable onPress={() => toggleFavorite(item.RestaurantName)}>
+                <Ionicons
+                  style={styles.fav}
+                  name="heart"
+                  size={24}
+                  color={
+                    favouriteRestaurant.has(item.RestaurantName)
+                      ? "red"
+                      : "white"
+                  }
+                />
+              </Pressable>
+
+              <View style={styles.rating}>
+                <FontAwesome name="star" size={16} color="grey" />
+                <FontAwesome name="star" size={16} color="grey" />
+                <FontAwesome name="star" size={16} color="grey" />
+                <FontAwesome name="star" size={16} color="grey" />
+                <FontAwesome name="star" size={16} color="grey" />
+              </View>
+              <Text style={styles.rateNo}>4.8</Text>
+            </View>
+          )}
+          keyExtractor={(item, index) => index.toString()}
         />
-        <Tab.Screen
-          name="Favorites"
-          component={FavouriteScreen}
-          options={{
-            tabBarIcon: ({ color, size }) => (
-              <Icon name="heart" color={color} size={size} />
-            ),
-            headerShown: false
-          }}
-        />
-        <Tab.Screen
-          name="Orders"
-          component={OrderScreen}
-          options={{
-            tabBarIcon: ({ color, size }) => (
-              <Icon name="shopping-cart" color={color} size={size} />
-            ),
-            headerShown: false
-          }}
-        />
-        <Tab.Screen
-          name="User"
-          component={UserScreen}
-          options={{
-            tabBarIcon: ({ color, size }) => (
-              <Icon name="user" color={color} size={size} />
-            ),
-            headerShown: false
-          }}
-        />
-      </Tab.Navigator>
+      </View>
+      <BotttomNavigator/>
+
     </View>
   );
 }
 
-
-// function HomeTab() {
-//   return (
-//     <View style={styles.container}>
-//       <NavBar />
-//       <Search/>
-//       <Restaurant/>
-//       <View style={styles.best}>
-//         <Text style={styles.popular}>Popular Menu</Text>
-//       </View>
-
-//     </View>
-//   );
-// }
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-  
-  
+    backgroundColor: "#fff",
   },
-  best:{
-    flexDirection: 'row'
+  header: {
+    color: "#000000",
+    fontWeight: "bold",
+    fontFamily: "Poppin",
   },
-  popular:{
-    color: '#fff'
+  menu: {
+    width: 100,
+    height: 80,
+    backgroundColor: "#000",
+    left: 10,
+    marginTop: 10,
+    borderRadius: 10,
   },
-  tabNavigator:{
-   
-    borderRadius: 20
+  menuName: {
+    backgroundColor: "#fff",
   },
-  content: {
-    marginTop: 5,
+  categories: {
+    marginTop: 30,
   },
-  HomeTab:{
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
-    backgroundColor: '#fff'
-  }
+  cat: {
+    marginLeft: 10,
+  },
+  catName: {
+    color: "#000000",
+    fontWeight: "bold",
+    fontSize: 15,
+
+  },
+  menuItems: {
+    flexDirection: "row",
+    gap: 20,
+  },
+  heards: {
+    color: "#fff",
+  },
+  hw: {
+    color: "#fff",
+  },
+  restaurant: {
+    top: 40,
+  },
+  res: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+  all: {
+    color: "#000000",
+    fontWeight: "bold",
+    fontFamily: "Poppin",
+    fontSize: 14,
+    left: 10,
+  },
+  viewAll: {
+    color: "#000000",
+    fontWeight: "bold",
+    fontFamily: "Poppin",
+    fontSize: 13,
+    right: 10,
+  },
+  resContainer: {
+    width: "90%",
+    height: 150,
+    backgroundColor: "#6E7F8D",
+    left: 20,
+    top: 50,
+    borderRadius: 5,
+    marginBottom: 20,
+  },
+  resImage: {
+    width: "100%",
+    height: 70,
+    borderTopLeftRadius: 5,
+    borderTopRightRadius: 5,
+  },
+  resName: {
+    fontWeight: "bold",
+    fontSize: 13,
+  },
+  delivery: {
+    fontSize: 10,
+    color: "white",
+  },
+  fav: {
+    left: 270,
+    bottom: 25,
+  },
+  rating: {
+    bottom: 25,
+    flexDirection: "row",
+  },
+  rateNo: {
+    left: 100,
+    bottom: 40,
+    fontSize: 10,
+    fontWeight: "bold",
+  },
 });

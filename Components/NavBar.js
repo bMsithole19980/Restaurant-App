@@ -18,7 +18,7 @@ export default function NavBar() {
 
       <View style={styles.notification}>
         <Pressable style={styles.notification} onPress={toggleModal}>
-          <FontAwesome name="bars" size={24} color="white" />
+          <FontAwesome name="bars" size={24} color="black" />
         </Pressable>
       </View>
 
@@ -45,11 +45,11 @@ export default function NavBar() {
 const styles = StyleSheet.create({
   nav: {
     flexDirection: "row",
-    top: 18,
+    marginTop: 18,
     
   },
   Head: {
-    color: "#fff",
+    color: "orange",
     fontSize: 14,
     fontWeight: "bold",
     marginLeft: 20,
@@ -57,10 +57,9 @@ const styles = StyleSheet.create({
   location: {
     flexDirection: "row",
     fontSize: 24,
-    color: "#fff",
+    color: "#000000",
   },
   notification: {
-    alignSelf: "flex-end",
     marginLeft: 100,
   },
   modal: {

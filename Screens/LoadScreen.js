@@ -168,7 +168,7 @@ const styles = StyleSheet.create({
     height: 80,
     borderRadius: 40,
     backgroundColor: "#FF9900",
-    left: 270,
+    left: 240,
     bottom: 160,
   },
 });

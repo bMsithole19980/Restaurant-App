@@ -139,6 +139,7 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 10,
     backgroundColor: '#000000',
+    borderRadius: 20
   },
   Header: {
     textAlign: 'center',
@@ -182,8 +183,19 @@ const styles = StyleSheet.create({
     borderColor: 'red',
   },
   errorText: {
+    alignSelf: 'flex-start',
+    marginLeft: 10,
     color: 'red',
     fontSize: 12,
+  },
+  eye: {
+    top: 5,
+  },
+  inputCheck: {
+    flexDirection: 'row',
+    alignSelf: 'flex-start',
+    padding: 5,
+    gap: 2,
   },
   checkBoxDetails: {
     flexDirection: 'row',

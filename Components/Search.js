@@ -3,10 +3,16 @@ import React, { useState } from 'react'
 import { TextInput } from 'react-native-gesture-handler'
 import { FontAwesome,  MaterialIcons } from '@expo/vector-icons';
 
-export default function Search() {
+export default function Search({onSearch}) {
     const [search , setSearch]= useState('');
     const handleClear=()=>{
       setSearch('');
+      onSearch('');
+    }
+
+    const handleSearch=(text)=>{
+      setSearch(text);
+      onSearch(text);
     }
   return (
     <View style={styles.container}>
@@ -14,9 +20,9 @@ export default function Search() {
         <FontAwesome name="search"  style={styles.icon} size={24} color="black" />  
         <TextInput
         style={styles.input}
-        placeholder='Search Foodies spot'
+        placeholder='Search based in location , cuisine or restaurant '
         value={search}
-        onChangeText={(text)=> setSearch(text)}/>
+        onChangeText={handleSearch}/>
        <MaterialIcons name="clear" size={24} color="black" onPress={handleClear} />
         </View>
        
@@ -47,7 +53,8 @@ const styles = StyleSheet.create({
     input:{
         flex: 1,
         fontSize: 14,
-        fontFamily: 'Poppin'
+        fontFamily: 'Poppin',
+      
     }
 
 })
