@@ -1,13 +1,13 @@
 import { StyleSheet, Text, View, Image, Pressable } from 'react-native'
 import React from 'react'
 import { useRoute } from '@react-navigation/native'
-import { FontAwesome, Ionicons } from '@expo/vector-icons';
+import { FontAwesome, Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 
 const RestaurantDetails = () => {
     const route = useRoute();
     const navigation = useNavigation();
-    const {restaurantName, restaurantImage, restaurantRating}= route.params;
+    const {restaurantName, restaurantAddress, DeliveryTime ,restaurantImage, restaurantRating}= route.params;
 
     const goToMenuScreen=()=>{
       navigation.navigate('MenuScreen');
@@ -28,8 +28,15 @@ const RestaurantDetails = () => {
         <Text style={styles.resName}>{restaurantName}</Text>
 
         <Text style={styles.resRating}>{restaurantRating}</Text>
-        <Text>Location</Text>
-        <Text> Delivery Time</Text>
+        <View style={styles.location}>
+        <Ionicons name="location-outline" size={24} color="black" />
+        <Text>{restaurantAddress}</Text>
+        </View>
+        <View style={styles.delivery}>
+        <MaterialCommunityIcons name="truck-delivery" size={24} color="black" />
+        {/* <Text> Delivery Time</Text> */}
+        <Text>{DeliveryTime}</Text>
+        </View>
         <View>
           <Pressable
           style={styles.button} 
@@ -62,6 +69,16 @@ const styles = StyleSheet.create({
     },
     back:{
     },
+    location:{
+      flexDirection: 'row',
+      top: 10,
+      color: 'grey'
+    },
+    delivery:{
+      flexDirection: 'row',
+      top: 10,
+    
+    },
     button:{
       left: 100,
       width: 140,
@@ -70,6 +87,7 @@ const styles = StyleSheet.create({
       backgroundColor: 'orange',
       alignItems: 'center',
       justifyContent: 'center',
+      top: 20
     },
     view:{
       fontWeight: 'bold',

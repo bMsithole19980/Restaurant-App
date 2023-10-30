@@ -7,9 +7,7 @@ import { collection, getDocs } from 'firebase/firestore'
 import { db } from '../Config/Firebase'
 import { FontAwesome, Ionicons } from '@expo/vector-icons'
 import { useNavigation } from '@react-navigation/native'
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 
-const Tab= createBottomTabNavigator();
 
 export default function RestaurantDiscovery() {
         const [restaurants, setRestaurants] = useState([]);
@@ -49,6 +47,8 @@ export default function RestaurantDiscovery() {
                     restaurantName: restaurant.RestaurantName,
                     restaurantImage: restaurant.RestaurantImage,
                     restaurantRating: restaurant.RestaurantRating,
+                    restaurantAddress: restaurant.RestaurantAddress,
+                    restaurantDeliveryTime: restaurant.DeliveryTime,
                 });
                }
 
