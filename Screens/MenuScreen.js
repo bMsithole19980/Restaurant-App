@@ -6,6 +6,18 @@ import Modal from "react-native-modal";
 import { useNavigation } from "@react-navigation/native";
 import { collection, getDocs } from "firebase/firestore";
 import {db} from '../Config/Firebase'
+import { useRoute } from "@react-navigation/native";
+import ReservationScreen from "./ReservationScreen";
+
+const categories=[
+  {name: "All"},
+  {name: "main course"},
+  {name: "desserts"},
+  {name: "appitezers"},
+  {name: "Chips & Wings"},
+];
+
+
 export default function MenuScreen() {
 
   const [isModalVisible, setModalVisible] = useState(false);
@@ -13,12 +25,20 @@ export default function MenuScreen() {
   const [menuItem, setMenuItem] = useState([]);
   const [selectedCategory, setSelectedCategory]=useState("All");
   const navigation = useNavigation();
+  const route =useRoute();
+  const restaurantName = route.params.restaurantName;
 
-
-  const toggleModal = () => {
-    setModalVisible(!isModalVisible);
+  const [openModalItem, setOpenModalItem]= useState(null)
+  const [selectedItem, setSelectedItem] = useState(null);
+  const toggleModal = (item) => {
+    setOpenModalItem(item.id);
+    setSelectedItem(item);
   };
-
+    
+  const closeModal=()=>{
+    setOpenModalItem(null);
+    setSelectedItem(null);
+}
   const increaseQuantity = () => {
     setQuantity(quantity + 1);
   };
@@ -67,38 +87,20 @@ export default function MenuScreen() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.restName}>Restaurant Name</Text>
+      <Text style={styles.restName}>{restaurantName}</Text>
       <Text>Menu</Text>
       <View style={styles.menu}>
-        <Pressable onPress={()=>handleCategoryChange("All")}>
-        <View style={styles.menuName}>
-          <Text 
-          style={styles.menuDetails}>All</Text>
-        </View>
-        </Pressable>
-        <Pressable  onPress={()=>handleCategoryChange("main course")}>
-        <View style={styles.menuName}>
-          <Text style={styles.menuDetails}>Main courses</Text>
-        </View>
-        </Pressable>
-        <Pressable>
-        <View style={styles.menuName}>
-          <Text style={styles.menuDetails}>Deserts</Text>
-        </View>
-        </Pressable>
-        <Pressable>
-        <View style={styles.menuName}>
-          <Text style={styles.menuDetails}>Burger</Text>
-        </View>
-        </Pressable>
-        <Pressable>
-        <View style={styles.menuName}>
-          <Text style={styles.menuDetails}>Chips & Wings</Text>
-        </View>
-        </Pressable>
+      {categories.map((category, index)=>(
+  <Pressable key={index} onPress={()=>handleCategoryChange(category.name)}>
+    <View style={styles.menuName}>
+      <Text style={styles.menuDetails}>{category.name}</Text>
+    </View>
+  </Pressable>
+))}
+
       </View>
-      {menuItem.map((item)=>(
-        <Pressable key={item.id} onPress={toggleModal}>
+      {filteredMenuItems.map((item)=>(
+        <Pressable key={item.id} onPress={()=>toggleModal(item)}>
       <View style={styles.itemContainer}>
        
           <Image style={styles.foodImage} alt="" source={{uri: item.itemImage}} />
@@ -107,20 +109,20 @@ export default function MenuScreen() {
           <Text style={styles.itemName}>{item.itemName}</Text>
           <Modal
             style={styles.modalContainer}
-            isVisible={isModalVisible}
+            isVisible={openModalItem === selectedItem?.id}
             animationType="slide"
           >
             <View style={styles.innerContent}>
               {/* Food details content here */}
-              <Pressable onPress={toggleModal} >
+              <Pressable onPress={closeModal} >
               <MaterialCommunityIcons  style={styles.closeButton} name="window-close" size={24} color="black" />
               </Pressable>
-              <Image style={styles.viewFoodDetails} alt="food" source={KFC} />
+              <Image style={styles.viewFoodDetails} alt="food" source={{uri: selectedItem?.itemImage}} />
               <Text>Food Name: Delicious Burger</Text>
               <Text>
-                Description:{item.itemDescription}
+                Description:{selectedItem?.itemDescription}
               </Text>
-              <Text> {item.itemPrice}</Text>
+              <Text> {selectedItem?.itemPrice}</Text>
               <View style={styles.quantityContainer}>
                 <Pressable onPress={decreaseQuantity}>
                   <FontAwesome name="minus" size={24} color="black" />
@@ -140,7 +142,7 @@ export default function MenuScreen() {
               
             </View>
           </Modal>
-          <Text style={styles.soldAt}>Restaurant name</Text>
+          <Text style={styles.soldAt}>{restaurantName}</Text>
           <View style={styles.ratingStars}>
             <FontAwesome name="star" size={12} color="grey" />
             <FontAwesome name="star" size={12} color="grey" />
@@ -150,7 +152,7 @@ export default function MenuScreen() {
             <Text> 
                 (4.5)</Text>
           </View>
-          <Text style={styles.price}>Price</Text>
+          <Text style={styles.price}>{item.itemPrice}</Text>
           <View style={styles.icons}>
             <MaterialIcons name="add" size={24} color="black" />
             <FontAwesome name="heart" size={24} color={"grey"} />

@@ -8,7 +8,6 @@ import { db } from "../Config/Firebase";
 import { FlatList } from "react-native-gesture-handler";
 import { Ionicons, FontAwesome} from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
-import BotttomNavigator from "../Components/BotttomNavigator";
 
 export default function HomeScreen() {
 
@@ -155,7 +154,7 @@ export default function HomeScreen() {
           keyExtractor={(item, index) => index.toString()}
         />
       </View>
-      <BotttomNavigator/>
+     
 
     </View>
   );

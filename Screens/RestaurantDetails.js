@@ -10,7 +10,7 @@ const RestaurantDetails = () => {
     const {restaurantName, restaurantAddress, DeliveryTime ,restaurantImage, restaurantRating}= route.params;
 
     const goToMenuScreen=()=>{
-      navigation.navigate('MenuScreen');
+      navigation.navigate('MenuScreen',{restaurantName});
     };
 
     const handleBack=()=>{

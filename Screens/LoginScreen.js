@@ -65,10 +65,10 @@ export default function LoginScreen() {
     <View style={styles.container}>
       <Text style={styles.Header}>Foodie's spot</Text>
       <Text style={styles.slogaan}>
-        Hi, welcome to your one-way stop for your tummy
+        Login to your account
       </Text>
       <View style={styles.form}>
-        <Text style={styles.labels}>Username</Text>
+      
         <TextInput
           style={{
             ...styles.inputs,
@@ -78,7 +78,7 @@ export default function LoginScreen() {
           placeholder="Your email..."
         />
         {emailError ? <Text style={styles.errorText}>{emailError}</Text> : null}
-        <Text style={styles.labels}>Password</Text>
+       
         <View
           style={{
             ...styles.inputs,
@@ -121,27 +121,29 @@ export default function LoginScreen() {
             <Text style={styles.buttonName}>Login</Text>
           </Pressable>
         </View>
+       
+        <View style={styles.alternative}>
+          <Text style={styles.altOption}>-Or Sign up with-</Text>
+        </View>
+        <View style={styles.socials}>
+          <Pressable
+          style={styles.altIcon}>
+            <FontAwesome5 name="facebook" size={30} color="blue" />
+          </Pressable>
+          <Pressable
+           style={styles.altIcon}>
+            <MaterialCommunityIcons name="gmail" size={30} color="red" />
+          </Pressable>
+          <Pressable
+           style={styles.altIcon}>
+            <FontAwesome name="linkedin" size={30} color="blue" />
+          </Pressable>
+         
+        </View>
         <View style={styles.links}>
           <Text style={styles.question}>Don't have an account?</Text>
           <Pressable onPress={() => navigation.navigate("RegisterScreen")}>
             <Text style={styles.Register}>Register</Text>
-          </Pressable>
-        </View>
-        <View style={styles.alternative}>
-          <Text style={styles.altOption}>Or Sign up with</Text>
-        </View>
-        <View style={styles.socials}>
-          <Pressable>
-            <FontAwesome5 name="facebook" size={24} color="blue" />
-          </Pressable>
-          <Pressable>
-            <MaterialCommunityIcons name="gmail" size={24} color="red" />
-          </Pressable>
-          <Pressable>
-            <FontAwesome name="linkedin" size={24} color="blue" />
-          </Pressable>
-          <Pressable>
-            <FontAwesome5 name="twitter" size={24} color="blue" />
           </Pressable>
         </View>
       </View>
@@ -153,47 +155,44 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 10,
-    backgroundColor: "#BC5810",
-    borderRadius: 20,
-    backgroundColor: "#000000",
+
+    backgroundColor: "#FFFFFF",
   },
   Header: {
     textAlign: "center",
     fontFamily: "Poppins",
     fontSize: 24,
     fontWeight: "bold",
-    color: "#fff",
+    color: "#235BC8",
+    marginTop: 70,
+    
   },
   slogaan: {
-    color: "#fff",
+    color: "#343639",
     fontWeight: "bold",
     fontFamily: "Poppin",
     fontSize: 15,
-    textAlign: "center",
-    top: 40,
+    left: 1,
+    padding: 30,
+    top: 34,
   },
   form: {
     justifyContent: "center",
     alignItems: "center",
-    marginTop: 150,
+    // marginTop: 150,
   },
-  labels: {
-    fontWeight: "bold",
-    fontSize: 14,
-    padding: 5,
-    color: "#fff",
-    marginRight: "79%",
-  },
+  
   inputs: {
-    backgroundColor: "#D9D9D9",
-    borderColor: "black",
+    backgroundColor: "#FFF",
+    borderColor: '#C2BFBF',
+    borderWidth: 2,
     flexDirection: "row",
-    height: 40,
+    height: 50,
     width: "90%",
     borderRadius: 10,
-    fontSize: 12,
+    fontSize: 14,
     fontFamily: "Poppins",
-    marginRight: 28,
+   marginTop: 20
   },
   eye: {
     top: 5,
@@ -210,10 +209,10 @@ const styles = StyleSheet.create({
     gap: 10,
     color: "#fff",
     top: 10,
-    right: 10
+    left: 10
   },
   remember: {
-    color: "#fff",
+    color: "#2D2C2C",
     width: 120,
     bottom: 5,
   },
@@ -226,10 +225,10 @@ const styles = StyleSheet.create({
   button: {
     justifyContent: "center",
     alignItems: "center",
-    width: "60%",
-    height: 40,
+    width: "90%",
+    height: 60,
     borderRadius: 10,
-    backgroundColor: "orange",
+    backgroundColor: "#235BC8",
     marginTop: 50,
   },
   buttonName: {
@@ -241,11 +240,12 @@ const styles = StyleSheet.create({
   links: {
     padding: 5,
     flexDirection: "row",
-    gap: 10,
+    gap: 15,
+    marginTop: 40,
   },
   question: {
     fontFamily: "Poppins",
-    color: "#fff",
+    color: "#2D2C2C",
     fontSize: 14,
   },
   Register: {
@@ -253,16 +253,24 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontFamily: "Poppins",
     fontWeight: "bold",
-  },
+  }, 
   altOption: {
     fontFamily: "Poppins",
-    color: "#fff",
+    color: "#2D2C2C",
     fontSize: 14,
+    marginTop: 40,
   },
   socials: {
-    marginTop: 10,
+    marginTop: 30,
     flex: 1,
     flexDirection: "row",
     gap: 25,
+  },
+  altIcon:{
+    alignItems: "center", 
+    justifyContent: "center", 
+    width: 50,
+    height: 50,
+    backgroundColor: "#fff",
   },
 });

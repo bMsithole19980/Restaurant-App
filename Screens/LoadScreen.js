@@ -53,9 +53,8 @@ const styles = StyleSheet.create({
     flex: 1,
     textAlign: "center",
     padding: 30,
-    backgroundColor: "#000000",
+    backgroundColor: "#0251EB",
     justifyContent: "center",
-    borderRadius: 20,
   },
   head: {
     color: "#fff",
@@ -79,7 +78,7 @@ const styles = StyleSheet.create({
     height: 285,
     borderRadius: 140,
     backgroundColor: "blue",
-    marginTop: 100,
+    marginTop: 50,
     justifyContent: "center",
     alignItems: "center",
     marginLeft: 30,
@@ -111,7 +110,7 @@ const styles = StyleSheet.create({
     height: 40,
     borderRadius: 10,
     backgroundColor: "orange",
-    marginTop: 80,
+    marginTop: 10,
     marginLeft: 90,
   },
   buttonName: {
@@ -125,7 +124,7 @@ const styles = StyleSheet.create({
     height: 80,
     borderRadius: 45,
     backgroundColor: "#FF9900",
-    top: 20,
+    top: 10,
     borderColor: "blue",
   },
   strokeLine: {

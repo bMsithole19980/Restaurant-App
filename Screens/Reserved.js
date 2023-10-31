@@ -1,10 +1,10 @@
 import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 
-export default function CartSCreen() {
+export default function Reserved() {
   return (
     <View>
-      <Text>CartSCreen</Text>
+      <Text>Reserved</Text>
     </View>
   )
 }
