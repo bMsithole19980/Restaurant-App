@@ -26,7 +26,7 @@ export default function MenuScreen() {
   const [selectedCategory, setSelectedCategory]=useState("All");
   const navigation = useNavigation();
   const route =useRoute();
-  const restaurantName = route.params.restaurantName;
+  const {restaurantName, restaurantAddress, DeliveryTime ,restaurantImage, restaurantRating} = route.params;
 
   const [openModalItem, setOpenModalItem]= useState(null)
   const [selectedItem, setSelectedItem] = useState(null);
@@ -50,7 +50,14 @@ export default function MenuScreen() {
   };
 
   const goToReservation=()=>{
-    navigation.navigate("ReservationScreen");
+    navigation.navigate("ReservationScreen",{
+      restaurantName: restaurantName,
+      restaurantImage: restaurantImage,
+      restaurantRating: restaurantRating,
+      restaurantAddress: restaurantAddress,
+      DeliveryTime: DeliveryTime,
+    
+    });
   }
 
   useEffect(() => {

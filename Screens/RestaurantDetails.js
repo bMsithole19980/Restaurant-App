@@ -10,7 +10,14 @@ const RestaurantDetails = () => {
     const {restaurantName, restaurantAddress, DeliveryTime ,restaurantImage, restaurantRating}= route.params;
 
     const goToMenuScreen=()=>{
-      navigation.navigate('MenuScreen',{restaurantName});
+     navigation.navigate('MenuScreen',{
+        restaurantName: restaurantName,
+        restaurantImage: restaurantImage,
+        restaurantRating: restaurantRating,
+        restaurantAddress: restaurantAddress,
+        DeliveryTime: DeliveryTime,
+     
+     });
     };
 
     const handleBack=()=>{
@@ -54,7 +61,6 @@ const styles = StyleSheet.create({
     container:{
       flex: 1,
       backgroundColor: '#fff',
-      borderRadius: 20
 
     },
     resName:{

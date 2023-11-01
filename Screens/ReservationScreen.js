@@ -9,19 +9,48 @@ import {
 import React, { useState } from "react";
 import { Ionicons } from "@expo/vector-icons";
 import { TextInput } from "react-native-gesture-handler";
-import KFC from "../assets/food.jpg";
-import { useNavigation } from "@react-navigation/native";
+import {useNavigation} from '@react-navigation/native';
 import { Picker } from "react-native-web";
+import { useRoute } from "@react-navigation/native";
+import {db} from '../Config/Firebase';
+import {collection , addDoc} from 'firebase/firestore';
 
 export default function ReservationScreen() {
   const [firstName, setFirstName] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [occasion, setOccasion] = useState("");
+  const [email , setEmail] =useState('');
   const [specialRequest, setSpecialRequest] = useState("");
+  const [date, setDate]= useState('');
   const navigation = useNavigation();
+  const route=useRoute();
+
+  const {restaurantName, restaurantAddress, DeliveryTime ,restaurantImage, restaurantRating}= route.params;
+
+  const handleReserve= async()=> {
+    try{
+    const reservationRef= collection(db, "reservations");
+    const reservationData={
+      firstName: firstName,
+      phoneNumber: phoneNumber,
+      occasion: occasion,
+      specialRequest: specialRequest,
+      date: date,
+      restaurantName: restaurantName,
+      email: email,
+    }
+    const docRef = await addDoc(reservationRef,reservationData);
+    console.log('reservation succesfully added with ID: ', docRef.id);
+    navigation.navigate("Reserved");
+    }catch(error){
+      console.error('Error adding document: ', error);
+    }
+  }
+
 
   const handleBack = () => {
     navigation.navigate("MenuScreen");
+    
   };
 
   const occasions = [
@@ -45,20 +74,41 @@ export default function ReservationScreen() {
         Confirm your reservation by entering your details
       </Text>
       <View style={styles.restDetails}>
-        <Image style={styles.image} alt="" source={KFC} />
+        <Image style={styles.image} alt="" source={restaurantImage} />
         <View style={styles.resDetailsText}>
-          <Text>Restaurant name</Text>
-          <Text>Restaurant location</Text>
-          <Text>Guests</Text>
+          <Text style={styles.restDetailsInfo}>{restaurantName}</Text>
+          <Text style={styles.restAddress}>{restaurantAddress}</Text>
+          <Text>{DeliveryTime}</Text>
           <Text>Date</Text>
         </View>
       </View>
       <View style={styles.form}>
         <Text style={styles.head}>Dinner details</Text>
         <Text style={styles.label}>First Name</Text>
-        <TextInput style={styles.input} placeholder="Enter your full name" />
+        <TextInput 
+        style={styles.input}
+        onChangeText={(text)=> setFirstName(text)} 
+        placeholder="Enter your full name" />
         <Text style={styles.label}>Phone Number</Text>
-        <TextInput style={styles.input} placeholder="Enter your Address" />
+        <TextInput 
+        style={styles.input}
+        onChangeText={(text)=> setPhoneNumber(text)} 
+        placeholder="Enter your Address" />
+        <Text style={styles.label}>Email</Text>
+        <TextInput 
+        style={styles.input} 
+        onChangeText={(text)=> setEmail(text)}
+        placeholder="Enter your email address" />
+        <Text style={styles.label}>No of guests</Text>
+        <TextInput 
+        style={styles.input}
+        onChangeText={(text)=> setPhoneNumber(text)} 
+        placeholder="enter number of guests" />
+        <Text style={styles.label}>Date and Time</Text>
+        <TextInput 
+        style={styles.input}
+        onChangeText={(text)=> setDate(text)} 
+        placeholder="Enter your full name" />
         <Picker
           selectedValue={occasion}
           style={styles.input}
@@ -75,12 +125,17 @@ export default function ReservationScreen() {
 
         {/* <TextInput style={styles.input} placeholder="Select Occassion" /> */}
         <Text style={styles.label}>Add a Special Request(optional)</Text>
-        <TextInput style={styles.input} placeholder="Select Occassion" />
+        <TextInput 
+        style={styles.input} 
+        onChangeText={(text)=> setSpecialRequest(text)}
+        placeholder="Select Occassion" />
         <View style={styles.checkBoxInfo}>
           <CheckBox style={styles.check} />
           <Text>By clicking "Reserve Now" you agree to the Terms of</Text>
         </View>
-        <Pressable style={styles.botton}>
+        <Pressable 
+        style={styles.botton}
+        onPress={handleReserve}>
           <Text style={styles.proceed}>Proceed</Text>
         </Pressable>
       </View>
@@ -112,6 +167,17 @@ const styles = StyleSheet.create({
     hieght: 70,
     marginTop: 10,
     gap: 20,
+  },
+  restDetailsInfo:{
+    fontSize:12,
+    color: 'grey',
+    fontFamily: 'Poppins',
+    fontWeight: "bold"
+  },
+  restAddress:{
+    fontSize:10,
+    color: 'grey',
+    fontFamily: 'Poppins',
   },
   image: {
     width: 110,

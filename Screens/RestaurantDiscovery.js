@@ -3,18 +3,17 @@ import React, { useEffect, useState } from 'react'
 import Search from '../Components/Search'
 import NavBar from '../Components/NavBar'
 import { FlatList } from 'react-native-gesture-handler'
-import { collection, getDocs } from 'firebase/firestore'
+import { collection, getDocs , addDoc} from 'firebase/firestore'
 import { db } from '../Config/Firebase'
 import { FontAwesome, Ionicons } from '@expo/vector-icons'
 import { useNavigation } from '@react-navigation/native'
-
 
 export default function RestaurantDiscovery() {
         const [restaurants, setRestaurants] = useState([]);
         const [searchQuery, setSearchQuery] = useState();
         const [locationQuery, setLocationQuery] = useState();
         const [favouriteRestaurant, setFavouriteRestaurant] = useState(new Set());
-
+        const [favorites, setFavorites] = useState([]);
         const navigation = useNavigation();
         
         useEffect(() => {
@@ -29,14 +28,19 @@ export default function RestaurantDiscovery() {
                 fetchRestaurantData();
             }, []);
         
-            const toggleFavorite = (restaurantName) => {
+            const toggleFavorite = async(item) => {
      
                 const updatedFavourites = new Set(favouriteRestaurant);
-        
-                if (updatedFavourites.has(restaurantName)) {
-                    updatedFavourites.delete(restaurantName);
+                const serializedRestaurant = JSON.stringify(item);
+                if (updatedFavourites.has(serializedRestaurant)) {
+                    updatedFavourites.delete(serializedRestaurant);
                 } else {
-                    updatedFavourites.add(restaurantName); 
+                    updatedFavourites.add(serializedRestaurant);
+                    try{
+                      await addDoc(collection(db, "FavouriteRestaurant"), item);
+                    }catch(error){
+                      console.error("Error adding document: ", e);
+                    }
                 }
         
                 setFavouriteRestaurant(updatedFavourites); 
@@ -96,12 +100,12 @@ export default function RestaurantDiscovery() {
                                 <Text style={styles.delivery}>Delivery fee: </Text>
                                 <Text style={styles.delivery}>Ksh {item.DeliveryFee}</Text>
                             </View>
-                            <Pressable onPress={() => toggleFavorite(item.RestaurantName)}>
+                            <Pressable onPress={() => toggleFavorite(item)}>
                                 <Ionicons
                                     style={styles.fav}
                                     size={24}
                                     color={
-                                        favouriteRestaurant.has(item.RestaurantName)
+                                        favouriteRestaurant.has(JSON.stringify(item))
                                             ? "red"
                                             : "white"
                                     }
