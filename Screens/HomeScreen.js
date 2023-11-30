@@ -1,7 +1,6 @@
 import { Pressable, StyleSheet, Text, View, Image } from "react-native";
 import React from "react";
 import NavaBar from "../Components/NavBar";
-import Search from "../Components/Search";
 import { useEffect, useState } from "react";;
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "../Config/Firebase";
@@ -25,25 +24,25 @@ export default function HomeScreen() {
       rating: "5.0",
     },
     {
-      id: 1,
+      id: 2,
       name: "Burger",
       image: "mbeme",
       rating: "5.0",
     },
     {
-      id: 1,
+      id: 3,
       name: "Burger",
       image: "mbeme",
       rating: "5.0",
     },
     {
-      id: 1,
+      id: 4,
       name: "Burger",
       image: "mbeme",
       rating: "5.0",
     },
     {
-      id: 1,
+      id: 5,
       name: "Burger",
       image: "mbeme",
       rating: "5.0",
@@ -97,7 +96,7 @@ export default function HomeScreen() {
           <Text style={styles.catName}>Categories</Text>
           <View style={styles.menuItems}>
             {menuItem.map((menuItem) => (
-              <View style={styles.menu}>
+              <View style={styles.menu} key={menuItem.id}>
                 <Pressable styles={styles.menuName}>
                   <Text>Burger</Text>
                 </Pressable>

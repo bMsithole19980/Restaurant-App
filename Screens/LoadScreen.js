@@ -3,7 +3,6 @@ import React from "react";
 import User from '../assets/Ellipse.jpg'
 import { useNavigation } from "@react-navigation/native";
 import imageg from "../assets/burger.png";
-import { HoverEffect } from "react-native-gesture-handler";
 
 export default function LoadScreen() {
   const navigation = useNavigation();

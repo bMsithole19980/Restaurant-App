@@ -26,7 +26,7 @@ export default function MenuScreen() {
   const [selectedCategory, setSelectedCategory]=useState("All");
   const navigation = useNavigation();
   const route =useRoute();
-  const {restaurantName, restaurantAddress, DeliveryTime ,restaurantImage, restaurantRating} = route.params;
+  const {restaurantName, restaurantAddress, DeliveryTime ,restaurantImage, restaurantRating} = route.params ||{};
 
   const [openModalItem, setOpenModalItem]= useState(null)
   const [selectedItem, setSelectedItem] = useState(null);
@@ -98,7 +98,7 @@ export default function MenuScreen() {
       <Text>Menu</Text>
       <View style={styles.menu}>
       {categories.map((category, index)=>(
-  <Pressable key={index} onPress={()=>handleCategoryChange(category.name)}>
+  <Pressable key={category.name} onPress={()=>handleCategoryChange(category.name)}>
     <View style={styles.menuName}>
       <Text style={styles.menuDetails}>{category.name}</Text>
     </View>

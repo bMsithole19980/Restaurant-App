@@ -14,9 +14,14 @@ import MenuScreen from "./Screens/MenuScreen";
 import ReservationScreen from "./Screens/ReservationScreen";
 import FavouriteScreen from "./Screens/FavouriteScreen";
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { FontAwesome, Ionicons } from "@expo/vector-icons";
-import { cloneElement } from "react";
+import { AntDesign, FontAwesome, Ionicons } from "@expo/vector-icons";
 import Reserved from "./Screens/Reserved";
+import UserScreen from "./Screens/UserScreen";
+import HomeScreenAdmin from "./Screens/AdminScreens/HomeScreenAdmin";
+import AccountsScreen from "./Screens/AdminScreens/AccountsScreen";
+import AdminReservationScreen from "./Screens/AdminScreens/AdminReservationScreen";
+import RestaurantsAdminScreen from "./Screens/AdminScreens/RestaurantsAdminScreen";
+import RestaurantMenuAdminScreen from "./Screens/AdminScreens/RestuarantMenuAdminScreen";
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -60,7 +65,19 @@ export default function App() {
             tabBarIcon: ({ color, size }) => (
               <Ionicons name="calendar" size={size} color={color}/>
             ),
-          }} />
+          }}/>
+          <Tab.Screen
+          name='User'
+          component={UserScreen}
+          options={{
+            headerShown: false,
+            tabBarLabel:'User',
+            tabBarIcon:({color, size})=>(
+              <AntDesign name="user" size={size} color={color} />
+            )
+            
+          }}/>
+          
         </Tab.Navigator>
       </NavigationContainer>
     </Provider>
@@ -68,7 +85,7 @@ export default function App() {
 }
 
 const HomeStack = () => (
-  <Stack.Navigator initialRouteName="RestaurantDiscovery">
+  <Stack.Navigator initialRouteName="AdminDashboard">
     <Stack.Screen name="LoadScreen" component={LoadScreen} options={{headerShown: false}} />
     <Stack.Screen name="RegisterScreen" component={RegisterScreen} options={{headerShown: false}} />
     <Stack.Screen name="LoginScreen" component={LoginScreen} options={{headerShown: false}} />
@@ -78,20 +95,30 @@ const HomeStack = () => (
     <Stack.Screen name="RestaurantDetails" component={RestaurantDetails} options={{headerShown: false}} />
     <Stack.Screen name="MenuScreen" component={MenuScreen} options={{headerShown: false}} />
     <Stack.Screen name="ReservationScreen" component={ReservationScreen} options={{headerShown: false}} />
+   
+   {/* Admin side */}
+   <Stack.Screen name="AdminDashboard" component={HomeScreenAdmin} options={{headerShown: false}} />
+   <Stack.Screen name="AccountsScreen" component={AccountsScreen} options={{headerShown: false}} />
+   <Stack.Screen name="AdminReservationScreen" component={AdminReservationScreen} options={{headerShown: false}} />
+   <Stack.Screen name="RestaurantsAdminScreen" component={RestaurantsAdminScreen} options={{headerShown: false}} />
+   <Stack.Screen name="RestaurantMenuAdminScreen" component={RestaurantMenuAdminScreen} options={{headerShown: false}} />
+
+ 
   </Stack.Navigator>
+
 );
 
-const FavoritesStack = () => (
-  <Stack.Navigator>
-    {/* Add screens for your "Favorites" here */}
-  </Stack.Navigator>
-);
+// const FavoritesStack = () => (
+//   <Stack.Navigator>
+//     {/* Add screens for your "Favorites" here */}
+//   </Stack.Navigator>
+// );
 
-const ReservationsStack = () => (
-  <Stack.Navigator>
-    <Stack.Screen name="ReservationScreen" component={ReservationScreen} options={{headerShown: false}} />
-  </Stack.Navigator>
-);
+// const ReservationsStack = () => (
+//   <Stack.Navigator>
+//     <Stack.Screen name="ReservationScreen" component={ReservationScreen} options={{headerShown: false}} />
+//   </Stack.Navigator>
+// );
 
 const styles = StyleSheet.create({
   container: {

@@ -17,6 +17,7 @@ import {
   FontAwesome5,
   MaterialCommunityIcons,
 } from "@expo/vector-icons";
+import HomeScreenAdmin from "./AdminScreens/HomeScreenAdmin";
 
 export default function LoginScreen() {
   const [email, setEmail] = useState("");
@@ -26,10 +27,12 @@ export default function LoginScreen() {
   const [passwordError, setPasswordError] = useState("");
   const [showPassword, setShowPassword] = useState(false);
 
+  const userRole =useSelector((state)=> state.user.role);
   const navigation = useNavigation();
   const dispatch = useDispatch();
 
   const handleLogin = async () => {
+
     setEmailError("");
     setPasswordError("");
 
@@ -53,7 +56,12 @@ export default function LoginScreen() {
         dispatch(login(userData));
 
         alert("Successfully logged in");
-        navigation.navigate("HomeScreen");
+       
+        if(userRole == 'admin'){
+          navigation.navigate('AdminDashboard');
+        }else{
+          navigation.navigate('HomeScreen')
+        }
       } catch (error) {
         console.error("Error logging in:", error.message);
         alert("Login failed. Please check your credentials and try again.");
