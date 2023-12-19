@@ -86,17 +86,22 @@ const styles = StyleSheet.create({
     
     },
     button:{
-      left: 100,
-      width: 140,
-      height: 50,
-      borderRadius: 10,
-      backgroundColor: 'orange',
-      alignItems: 'center',
+      width: '90%',
+      height: 40,
+      backgroundColor: 'green',
+      color: '#fff',
+      top: 250,
+      left: 20,
+      alignItems: "center",
       justifyContent: 'center',
-      top: 20
+      borderRadius: 10,
+  
     },
     view:{
+      color: "#fff",
+      fontSize: 16,
       fontWeight: 'bold',
       fontFamily: 'Poppins',
+      textAlign: 'center',
     }
 })

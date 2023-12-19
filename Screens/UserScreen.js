@@ -1,11 +1,12 @@
 import {  StyleSheet, Text, View } from 'react-native'
 import React, { useState } from 'react'
 import { TouchableOpacity } from 'react-native-gesture-handler'
-import { Navigation } from 'react-router-dom';
+import { useNavigation } from '@react-navigation/native';
 
 
 export default function UserScreen() {
   const [favourite,setRestaurants]= useState([]);
+  const naavigation =useNavigation();
 
   const handleLogOut=()=>{
     navigation.navigate('LoginScreen');

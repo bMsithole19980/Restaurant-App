@@ -1,23 +1,13 @@
 import React, { useState } from "react";
-import {
-  View,
-  Text,
-  TextInput,
-  StyleSheet,
-  Pressable,
-  CheckBox,
-} from "react-native";
+import { View, Text, TextInput, StyleSheet, Pressable, CheckBox } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { useDispatch, useSelector } from "react-redux";
 import { login } from "../src/UserActions";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../Config/Firebase";
-import {
-  FontAwesome,
-  FontAwesome5,
-  MaterialCommunityIcons,
-} from "@expo/vector-icons";
+import { FontAwesome, FontAwesome5, MaterialCommunityIcons } from "@expo/vector-icons";
 import HomeScreenAdmin from "./AdminScreens/HomeScreenAdmin";
+import Toast from 'react-native-toast-message'; // Import the toast library
 
 export default function LoginScreen() {
   const [email, setEmail] = useState("");
@@ -27,12 +17,11 @@ export default function LoginScreen() {
   const [passwordError, setPasswordError] = useState("");
   const [showPassword, setShowPassword] = useState(false);
 
-  const userRole =useSelector((state)=> state.user.role);
+  const userRole = useSelector((state) => state.user.role);
   const navigation = useNavigation();
   const dispatch = useDispatch();
 
   const handleLogin = async () => {
-
     setEmailError("");
     setPasswordError("");
 
@@ -46,25 +35,33 @@ export default function LoginScreen() {
 
     if (email.trim() !== "" && password.trim() !== "") {
       try {
-        const userCredential = await signInWithEmailAndPassword(
-          auth,
-          email,
-          password
-        );
+        const userCredential = await signInWithEmailAndPassword(auth, email, password);
         const user = userCredential.user;
         const userData = { email: user.email, agreedToTerms: isChecked };
         dispatch(login(userData));
 
-        alert("Successfully logged in");
-       
-        if(userRole == 'admin'){
-          navigation.navigate('AdminDashboard');
-        }else{
-          navigation.navigate('HomeScreen')
+        // Replace the alert with a toast message for successful login
+        Toast.show({
+          type: 'success',
+          text1: 'Login Successful',
+          visibilityTime: 3000,
+        });
+
+        if (userRole === 'admin') {
+          navigation.navigate('HomeScreenAdmin');
+        } else {
+          navigation.navigate('MainTab');
         }
       } catch (error) {
         console.error("Error logging in:", error.message);
-        alert("Login failed. Please check your credentials and try again.");
+
+        // Replace the alert with a toast message for login failure
+        Toast.show({
+          type: 'error',
+          text1: 'Login failed',
+          text2: 'Please check your credentials and try again.',
+          visibilityTime: 3000,
+        });
       }
     }
   };
@@ -72,11 +69,8 @@ export default function LoginScreen() {
   return (
     <View style={styles.container}>
       <Text style={styles.Header}>Foodie's spot</Text>
-      <Text style={styles.slogaan}>
-        Login to your account
-      </Text>
+      <Text style={styles.slogaan}>Login to your account</Text>
       <View style={styles.form}>
-      
         <TextInput
           style={{
             ...styles.inputs,
@@ -86,38 +80,22 @@ export default function LoginScreen() {
           placeholder="Your email..."
         />
         {emailError ? <Text style={styles.errorText}>{emailError}</Text> : null}
-       
-        <View
-          style={{
-            ...styles.inputs,
-            ...(passwordError ? styles.inputError : null),
-          }}
-        >
+
+        <View style={{ ...styles.inputs, ...(passwordError ? styles.inputError : null) }}>
           <TextInput
             style={{ flex: 1 }}
             onChangeText={(text) => setPassword(text)}
             placeholder="Password.."
             secureTextEntry={!showPassword}
           />
-          <Pressable
-            onPress={() => setShowPassword(!showPassword)}
-            style={styles.eye}
-          >
-            <FontAwesome
-              name={showPassword ? "eye" : "eye-slash"}
-              size={24}
-              color="black"
-            />
+          <Pressable onPress={() => setShowPassword(!showPassword)} style={styles.eye}>
+            <FontAwesome name={showPassword ? "eye" : "eye-slash"} size={24} color="black" />
           </Pressable>
         </View>
-        {passwordError ? (
-          <Text style={styles.errorText}>{passwordError}</Text>
-        ) : null}
+        {passwordError ? <Text style={styles.errorText}>{passwordError}</Text> : null}
+        
         <View style={styles.checkBoxDetails}>
-          <CheckBox
-            value={isChecked}
-            onValueChange={() => setIsChecked(!isChecked)}
-          />
+          <CheckBox value={isChecked} onValueChange={() => setIsChecked(!isChecked)} />
           <Text style={styles.remember}>Remember me</Text>
           <Pressable onPress={() => navigation.navigate("ForgotPassword")}>
             <Text style={styles.forgot}>Forgot password ?</Text>
@@ -129,25 +107,22 @@ export default function LoginScreen() {
             <Text style={styles.buttonName}>Login</Text>
           </Pressable>
         </View>
-       
+
         <View style={styles.alternative}>
           <Text style={styles.altOption}>-Or Sign up with-</Text>
         </View>
         <View style={styles.socials}>
-          <Pressable
-          style={styles.altIcon}>
+          <Pressable style={styles.altIcon}>
             <FontAwesome5 name="facebook" size={30} color="blue" />
           </Pressable>
-          <Pressable
-           style={styles.altIcon}>
+          <Pressable style={styles.altIcon}>
             <MaterialCommunityIcons name="gmail" size={30} color="red" />
           </Pressable>
-          <Pressable
-           style={styles.altIcon}>
+          <Pressable style={styles.altIcon}>
             <FontAwesome name="linkedin" size={30} color="blue" />
           </Pressable>
-         
         </View>
+        
         <View style={styles.links}>
           <Text style={styles.question}>Don't have an account?</Text>
           <Pressable onPress={() => navigation.navigate("RegisterScreen")}>
@@ -163,7 +138,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 10,
-
     backgroundColor: "#FFFFFF",
   },
   Header: {
@@ -173,7 +147,11 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     color: "#235BC8",
     marginTop: 70,
-    
+  },
+  toastContainer: {
+    height: 80, // Adjust the height according to your design
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   slogaan: {
     color: "#343639",
@@ -187,12 +165,10 @@ const styles = StyleSheet.create({
   form: {
     justifyContent: "center",
     alignItems: "center",
-    // marginTop: 150,
   },
-  
   inputs: {
     backgroundColor: "#FFF",
-    borderColor: '#C2BFBF',
+    borderColor: "#C2BFBF",
     borderWidth: 2,
     flexDirection: "row",
     height: 50,
@@ -200,7 +176,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     fontSize: 14,
     fontFamily: "Poppins",
-   marginTop: 20
+    marginTop: 20,
   },
   eye: {
     top: 5,
@@ -217,7 +193,7 @@ const styles = StyleSheet.create({
     gap: 10,
     color: "#fff",
     top: 10,
-    left: 10
+    left: 10,
   },
   remember: {
     color: "#2D2C2C",
@@ -261,7 +237,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontFamily: "Poppins",
     fontWeight: "bold",
-  }, 
+  },
   altOption: {
     fontFamily: "Poppins",
     color: "#2D2C2C",
@@ -274,9 +250,9 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     gap: 25,
   },
-  altIcon:{
-    alignItems: "center", 
-    justifyContent: "center", 
+  altIcon: {
+    alignItems: "center",
+    justifyContent: "center",
     width: 50,
     height: 50,
     backgroundColor: "#fff",

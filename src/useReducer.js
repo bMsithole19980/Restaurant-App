@@ -1,28 +1,30 @@
-const initialState={
-    user: null,
-};
-
-const userReducer =(state= initialState, action)=>{
-    switch(action.type){
-        case 'LOGIN':
-            return{
-                ...state,
-                user: action.payload,
-            };
-        case 'LOGOUT':
-            return{
-                ...state,
-                user: null
-            };
-        case 'REGISTER':
-            return{
-                ...state,
-                user: action.payload,
-            }
-
-        default:
-            return state;
+// useReducer.js
+const initialState = {
+    role: null,
+  };
+  
+  const userReducer = (state = initialState, action) => {
+    switch (action.type) {
+      case 'LOGIN':
+        return {
+          ...state,
+          role: action.payload.agreedToTerms ? 'admin' : 'user', // Assuming agreedToTerms determines the role
+        };
+      case 'LOGOUT':
+        return {
+          ...state,
+          role: null,
+        };
+      case 'REGISTER':
+        return {
+          ...state,
+          role: action.payload.agreedToTerms ? 'admin' : 'user', // Assuming agreedToTerms determines the role
+        };
+  
+      default:
+        return state;
     }
-};
-
-export default userReducer;
+  };
+  
+  export default userReducer;
+  

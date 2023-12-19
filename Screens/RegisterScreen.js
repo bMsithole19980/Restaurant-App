@@ -12,6 +12,8 @@ import { auth } from "../Config/Firebase";
 import { Picker } from "@react-native-picker/picker";
 import { collection, addDoc } from "firebase/firestore";
 import { db } from "../Config/Firebase";
+import Toast from 'react-native-toast-message'; // Import the toast library
+
 export default function RegisterScreen({ navigation }) {
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
@@ -26,23 +28,34 @@ export default function RegisterScreen({ navigation }) {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user);
 
+  const showToast = (type, text1, text2) => {
+    Toast.show({
+      type,
+      text1,
+      text2,
+      visibilityTime: 3000,
+    });
+  };
+
   const handleRegister = async () => {
     setEmailError("");
     setPasswordError("");
 
     if (email.trim() === "") {
       setEmailError("Email is required");
+      showToast('error', 'Registration failed', 'Email is required');
       return;
     }
 
     if (password.trim() === "") {
       setPasswordError("Password is required");
+      showToast('error', 'Registration failed', 'Password is required');
       return;
     }
 
     try {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-    const user = userCredential.user;
+      const user = userCredential.user;
       await addDoc(collection(db, 'users'), {
         uid: user.uid,
         firstName: name,
@@ -52,10 +65,11 @@ export default function RegisterScreen({ navigation }) {
         role,
       });
 
+      showToast('success', 'Registration Successful', 'You can now log in.');
       navigation.navigate("LoginScreen");
     } catch (error) {
       console.error("Error registering user:", error.message);
-      alert("Registration failed. Please try again.");
+      showToast('error', 'Registration failed', 'Please try again.');
     }
   };
 
@@ -150,6 +164,10 @@ export default function RegisterScreen({ navigation }) {
             <FontAwesome5 name="linkedin" size={24} color="blue" />
           </Pressable>
         </View>
+        
+        {/* Toast Container */}
+        <Toast style={styles.toastContainer} position="bottom" />
+
       </View>
     </View>
   );
@@ -269,5 +287,10 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: "row",
     gap: 25,
+  },
+  toastContainer: {
+    height: 80,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
